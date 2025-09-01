@@ -10,7 +10,7 @@
 
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
-
+#include <cmath>
 // Declare LCD object globally
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
@@ -104,7 +104,7 @@ float mesureWaterLevel() {
 	Serial.println("Distance:" +  String(distance_cm) + " cm");
 
   float waterLevel = ( (EMPTY_BOTTLE_DEPTH - distance_cm) / EMPTY_BOTTLE_DEPTH ) * 100; // Water Level in Percent
-  
+  waterLevel = fmax(waterLevel, 100);
   waterLevel = roundf(waterLevel * 100) / 100.0;   // Round to 2 decimal places
 
   return waterLevel;
@@ -233,12 +233,12 @@ void loop() {
   readSensor(&voltageValue, &tdsValue); // เรียกฟังก์ชันเพื่ออ่านค่าจากเซ็นเซอร์
 
   // แสดงผลลัพธ์ออกทาง Serial Monitor
-  Serial.print("Voltage: ");
-  Serial.print(voltageValue, 2); // แสดงทศนิยม 2 ตำแหน่ง
-  Serial.print("V   ");
-  Serial.print("TDS: ");
-  Serial.print(tdsValue, 0); // แสดงเป็นเลขจำนวนเต็ม
-  Serial.println(" ppm");
+  // Serial.print("Voltage: ");
+  // Serial.print(voltageValue, 2); // แสดงทศนิยม 2 ตำแหน่ง
+  // Serial.print("V   ");
+  // Serial.print("TDS: ");
+  // Serial.print(tdsValue, 0); // แสดงเป็นเลขจำนวนเต็ม
+  // Serial.println(" ppm");
 
   // delay(1000); // หน่วงเวลา 1 วินาทีก่อนอ่านค่าครั้งต่อไป
   displayData(waterTemp, waterLevel, tdsValue);
